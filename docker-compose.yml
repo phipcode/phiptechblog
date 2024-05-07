@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  cloudflared-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflaretunnel
+    command: ["tunnel", "--no-autoupdate", "run", "--token", "${TOKEN}", "--hello-world"]
+    env_file:
+      - .env
