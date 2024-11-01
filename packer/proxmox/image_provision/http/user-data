@@ -1,0 +1,52 @@
+#cloud-config
+autoinstall:
+  version: 1
+  early-commands:
+    # Stop SSH to prevent Packer from connecting too early
+    - sudo systemctl stop ssh
+  locale: en_US
+  keyboard:
+    layout: us
+  ssh:
+    install-server: true
+    allow-pw: true
+    disable_root: true
+    ssh_quiet_keygen: true
+    allow_public_ssh_keys: false # Set to false if using password authentication.
+    
+  packages:
+    - qemu-guest-agent
+    - sudo
+    - curl
+    - net-tools
+    - openssh-server
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  user-data:
+    package_upgrade: false
+    timezone: Australia/Melbourne
+    users:
+      - name: phip
+        groups: [adm, sudo]
+        lock-passwd: false
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        passwd: '$6$VmV/ls.LybQO2KY0$IBzbyocVWUqo3Ps0AbAzl82JOkb.ktgOuZiP4Ldfc45e41RASM5Kx9s3MbrYpRkxlfwTp.Msg8NOF887lufTI/' #use mkpasswd -m sha-512 to generate
+        # - or -
+        # ssh_authorized_keys:
+        #   - ssh-rsa <key>
+  late-commands:
+    - echo 'phip ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/phip
+    - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/phip
+    - curtin in-target --target=/target -- apt-get update
+    - curtin in-target --target=/target -- apt-get install -y ca-certificates curl gnupg
+    - curtin in-target --target=/target -- install -m 0755 -d /etc/apt/keyrings
+    - curtin in-target --target=/target -- curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    - curtin in-target --target=/target -- chmod a+r /etc/apt/keyrings/docker.asc
+    - curtin in-target --target=/target -- /bin/bash -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null'
+    - curtin in-target --target=/target -- apt-get update
+    - curtin in-target --target=/target -- apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || (echo "Docker installation failed" && exit 1)
+    - curtin in-target --target=/target -- apt-get upgrade --yes
