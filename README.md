@@ -5,8 +5,8 @@ This repository contains the code examples and scripts that I've shared on my bl
 ## Contents
 
 - [Cloud Flare Tunnel](./cloudflaretunnel) - Quick Guide to Setting Up Cloudflare Tunnel to Expose Your Local Service or Application using Docker
-- [Packer](./[packer](https://github.com/phipcode/phiptechblog/tree/main/packer))
-- [Terraform](./[terraform](https://github.com/phipcode/phiptechblog/tree/main/terraform))
+- [Packer](./packer) - Step-by-Step Guide: Building Custom Proxmox Images with Packer
+- [Terraform](./terraform) - Proxmox - Automate VM provisioning using Terraform
 
 ## Usage
 
