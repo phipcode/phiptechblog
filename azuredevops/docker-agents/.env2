@@ -1,0 +1,4 @@
+AZP_URL=https://dev.azure.com/your-org
+AZP_TOKEN=your-pat-token
+AZP_POOL=Default
+AZP_AGENT_NAME=docker-agent-2

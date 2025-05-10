@@ -4,6 +4,7 @@ This repository contains the code examples and scripts that I've shared on my bl
 
 ## Contents
 
+- [Azure Devops](./azuredevops) - Azure Devops 
 - [Cloud Flare Tunnel](./cloudflaretunnel) - Quick Guide to Setting Up Cloudflare Tunnel to Expose Your Local Service or Application using Docker
 - [Packer](./packer) - Step-by-Step Guide: Building Custom Proxmox Images with Packer
 - [Terraform](./terraform/proxmox/vm_build) - Proxmox - Automate VM provisioning using Terraform
