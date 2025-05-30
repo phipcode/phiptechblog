@@ -1,0 +1,57 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest  # Pinning image version
+    container_name: prometheus
+    entrypoint: /bin/sh -c /etc/prometheus/entrypoint.sh
+
+      
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - ./prometheus/pve.yml:/etc/prometheus/pve.yml  # Mount the pve.yml credentials file
+      - prom_data:/prometheus
+    networks:
+      - monitoring
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet http://localhost:9090 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  grafana:
+    image: grafana/grafana:latest  # Pinning image version
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  prom_data:
+  grafana_data: 
+
+networks:
+  monitoring:
+
+# secrets:
+#   grafana_admin_password:
+#     file: ./secrets/grafana_admin_password  # Store sensitive info as a secret

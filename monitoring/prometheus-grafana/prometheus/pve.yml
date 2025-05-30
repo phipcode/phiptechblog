@@ -1,0 +1,4 @@
+default:
+    user: pve-exporter@pve
+    password: <password>
+    verify_ssl: false
