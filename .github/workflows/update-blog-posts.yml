@@ -16,27 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Update blog posts
+        uses: gautamkrishnar/blog-post-workflow@v1
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install feedparser requests
-
-      - name: Fetch and update blog posts
-        run: python scripts/update_blog_posts.py
-
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add LATEST_BLOG_POSTS.md
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update latest blog posts - $(date +'%Y-%m-%d')"
-            git push
-          fi
+          feed_list: "https://phiptech.com/feed/"

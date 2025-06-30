@@ -128,7 +128,8 @@ For detailed explanations and step-by-step tutorials, visit **[Phi's Tech Blog](
 
 ### **📰 Latest Blog Posts**
 
-The latest blog posts from Phi's Tech Blog are automatically fetched and displayed in **[LATEST_BLOG_POSTS.md](./LATEST_BLOG_POSTS.md)**. This file is updated daily via GitHub Actions to keep you informed about new content.
+<!-- BLOG-POST-LIST:START -->
+<!-- BLOG-POST-LIST:END -->
 
 ## ⚠️ Important Notes & Caveats
 
