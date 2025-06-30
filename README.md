@@ -119,6 +119,11 @@ Each directory contains its own README with detailed setup instructions and usag
 ### **📰 Latest Blog Posts**
 
 <!-- BLOG-POST-LIST:START -->
+- [Installing Grafana &amp; Prometheus for Proxmox Monitoring](https://phiptech.com/installing-grafana-prometheus-for-proxmox-monitoring/)
+- [Deploying virtual machines  using Azure Verified Modules with Bicep](https://phiptech.com/deploying-virtual-machines-using-azure-verfied-modules-with-bicep/)
+- [How to Set Up Local HTTPS with Custom Certificates Using Nginx Proxy Manager](https://phiptech.com/how-to-set-up-https-locally-using-nginx-proxy-manager/)
+- [Deploying Multiple Self-Hosted DevOps Agents Using Docker](https://phiptech.com/how-to-run-multiple-azure-devops-self-hosted-agents-using-docker-and-a-dockerfile/)
+- [How to Install Oh My Posh on Windows &lpar;PowerShell 7 + winget&rpar;](https://phiptech.com/how-to-install-oh-my-posh-on-windows-powershell-7-winget/)
 <!-- BLOG-POST-LIST:END -->
 
 ## ⚠️ Important Notes & Caveats
