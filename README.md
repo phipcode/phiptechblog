@@ -116,15 +116,10 @@ Each directory contains its own README with detailed setup instructions and usag
 - **Proxmox VM Automation** - Automated virtual machine provisioning
 - Scalable infrastructure management with Infrastructure as Code
 
-## 📖 Related Blog Posts
+### **📰 Latest Blog Posts**
 
-For detailed explanations and step-by-step tutorials, visit **[Phi's Tech Blog](https://phiptech.com)**:
-
-- **[Automate VM Provisioning Using Terraform in Proxmox](https://phiptech.com/automate-vm-provisioning-using-terraform/)**
-- **[How to Setup Cloudflare Tunnel and Expose Your Local Service](https://phiptech.com/how-to-setup-cloudflare-tunnel-and-expose-your-local-service-or-application/)**
-- **[Building Custom Proxmox Images with Packer](https://phiptech.com)** *(Step-by-Step Guide)*
-
-*More blog posts are regularly added covering the latest examples and use cases.*
+<!-- BLOG-POST-LIST:START -->
+<!-- BLOG-POST-LIST:END -->
 
 ## ⚠️ Important Notes & Caveats
 
