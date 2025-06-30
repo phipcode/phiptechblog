@@ -126,6 +126,10 @@ For detailed explanations and step-by-step tutorials, visit **[Phi's Tech Blog](
 
 *More blog posts are regularly added covering the latest examples and use cases.*
 
+### **📰 Latest Blog Posts**
+
+The latest blog posts from Phi's Tech Blog are automatically fetched and displayed in **[LATEST_BLOG_POSTS.md](./LATEST_BLOG_POSTS.md)**. This file is updated daily via GitHub Actions to keep you informed about new content.
+
 ## ⚠️ Important Notes & Caveats
 
 ### **Security Considerations**
