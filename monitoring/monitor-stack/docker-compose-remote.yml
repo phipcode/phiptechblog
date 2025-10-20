@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail-remote
+    restart: unless-stopped
+    volumes:
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log/pve:/var/log/pve:ro  # Remove if not Proxmox
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitoring
+    environment:
+      - HOSTNAME=Phi-PC
+      - SERVER_TYPE=Ubuntu
+      
+    ports:
+      - "9080:9080"  # Optional: for Promtail metrics
+
+networks:
+  monitoring:
+    driver: bridge

@@ -1,0 +1,104 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: default-receiver
+    receivers:
+      - uid: default-email
+        type: email
+        settings:
+          addresses: admin@localhost
+          subject: "[Grafana] {{ .GroupLabels.alertname }}"
+          message: |
+            {{ range .Alerts }}
+            Alert: {{ .Annotations.summary }}
+            Description: {{ .Annotations.description }}
+            Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+            {{ end }}
+        disableResolveMessage: false
+
+  - orgId: 1
+    name: critical-alerts
+    receivers:
+      - uid: critical-email
+        type: email
+        settings:
+          addresses: admin@localhost
+          subject: "🚨 CRITICAL ALERT: {{ .GroupLabels.alertname }}"
+          message: |
+            CRITICAL SYSTEM ALERT
+            
+            {{ range .Alerts }}
+            🔥 Alert: {{ .Annotations.summary }}
+            📝 Description: {{ .Annotations.description }}
+            🏷️ Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+            ⏰ Started: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            {{ end }}
+            
+            Please investigate immediately!
+        disableResolveMessage: false
+
+  - orgId: 1
+    name: warning-alerts
+    receivers:
+      - uid: warning-email
+        type: email
+        settings:
+          addresses: admin@localhost
+          subject: "⚠️ WARNING: {{ .GroupLabels.alertname }}"
+          message: |
+            Warning Alert Triggered
+            
+            {{ range .Alerts }}
+            ⚠️ Alert: {{ .Annotations.summary }}
+            📝 Description: {{ .Annotations.description }}
+            🏷️ Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+            ⏰ Started: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            {{ end }}
+        disableResolveMessage: false
+
+  - orgId: 1
+    name: ssh-alerts
+    receivers:
+      - uid: ssh-email
+        type: email
+        settings:
+          addresses: security@localhost
+          subject: "🔐 SSH Security Alert: {{ .GroupLabels.alertname }}"
+          message: |
+            SSH Security Alert
+            
+            {{ range .Alerts }}
+            🔐 Alert: {{ .Annotations.summary }}
+            📝 Description: {{ .Annotations.description }}
+            🏷️ Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+            ⏰ Started: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            {{ end }}
+            
+            Please review SSH access logs immediately.
+        disableResolveMessage: false
+
+      # Uncomment and configure for Slack notifications
+      # - uid: ssh-slack
+      #   type: slack
+      #   settings:
+      #     url: YOUR_SLACK_WEBHOOK_URL
+      #     channel: "#security-alerts"
+      #     title: "SSH Security Alert"
+      #     text: |
+      #       {{ range .Alerts }}
+      #       Alert: {{ .Annotations.summary }}
+      #       Description: {{ .Annotations.description }}
+      #       {{ end }}
+
+      # Uncomment and configure for Discord notifications
+      # - uid: ssh-discord
+      #   type: discord
+      #   settings:
+      #     url: YOUR_DISCORD_WEBHOOK_URL
+      #     title: "SSH Security Alert"
+      #     message: |
+      #       {{ range .Alerts }}
+      #       **Alert:** {{ .Annotations.summary }}
+      #       **Description:** {{ .Annotations.description }}
+      #       {{ end }}
