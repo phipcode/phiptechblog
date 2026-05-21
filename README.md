@@ -87,6 +87,65 @@ Make sure you have the relevant tools installed before running any example:
 
 ## 📰 Latest Blog Posts
 <!-- BLOG-CARDS:START -->
+
+<table width="100%"><tr>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/how-to-add-google-drive-to-proxmox-using-rclone/"><img src="assets/blog-thumbnails/how-to-add-google-drive-to-proxmox-using-rclone.webp" width="100%" alt="How to Add Google Drive to Proxmox Using Rclone" /></a>
+  <br />
+  <a href="https://phiptech.com/how-to-add-google-drive-to-proxmox-using-rclone/"><strong>How to Add Google Drive to Proxmox Using Rclone</strong></a>
+  <br />
+  <sub>May 09, 2026 &bull; 7 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/how-to-add-google-drive-to-proxmox-using-rclone/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/real-time-monitoring-with-grafana-loki-and-promtail-a-complete-guide/"><img src="assets/blog-thumbnails/real-time-monitoring-with-grafana-loki-and-promtail-a-complete-guide.png" width="100%" alt="How to Set Up Real-Time Log Monitoring with Grafana, Loki, a" /></a>
+  <br />
+  <a href="https://phiptech.com/real-time-monitoring-with-grafana-loki-and-promtail-a-complete-guide/"><strong>How to Set Up Real-Time Log Monitoring with Grafana, Loki, a</strong></a>
+  <br />
+  <sub>Oct 20, 2025 &bull; 7 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/real-time-monitoring-with-grafana-loki-and-promtail-a-complete-guide/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/create-a-private-container-registry-in-azure-for-bicep-modules/"><img src="assets/blog-thumbnails/create-a-private-container-registry-in-azure-for-bicep-modules.webp" width="100%" alt="Create an Azure Container Registry(ACR) in Azure for Bicep M" /></a>
+  <br />
+  <a href="https://phiptech.com/create-a-private-container-registry-in-azure-for-bicep-modules/"><strong>Create an Azure Container Registry(ACR) in Azure for Bicep M</strong></a>
+  <br />
+  <sub>Sep 22, 2025 &bull; 4 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/create-a-private-container-registry-in-azure-for-bicep-modules/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+</tr><tr>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/how-to-set-up-an-mcp-server-for-github-copilot-in-vs-code/"><img src="assets/blog-thumbnails/how-to-set-up-an-mcp-server-for-github-copilot-in-vs-code.png" width="100%" alt="How to Set Up an MCP Server for GitHub Copilot in VS Code" /></a>
+  <br />
+  <a href="https://phiptech.com/how-to-set-up-an-mcp-server-for-github-copilot-in-vs-code/"><strong>How to Set Up an MCP Server for GitHub Copilot in VS Code</strong></a>
+  <br />
+  <sub>Jul 15, 2025 &bull; 4 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/how-to-set-up-an-mcp-server-for-github-copilot-in-vs-code/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/how-to-set-up-ntfy-for-push-notifications-using-docker/"><img src="assets/blog-thumbnails/how-to-set-up-ntfy-for-push-notifications-using-docker.webp" width="100%" alt="How to Set Up Ntfy for Push Notifications Using Docker" /></a>
+  <br />
+  <a href="https://phiptech.com/how-to-set-up-ntfy-for-push-notifications-using-docker/"><strong>How to Set Up Ntfy for Push Notifications Using Docker</strong></a>
+  <br />
+  <sub>Jul 12, 2025 &bull; 5 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/how-to-set-up-ntfy-for-push-notifications-using-docker/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+<td width="33%" align="center" valign="top">
+  <a href="https://phiptech.com/installing-grafana-prometheus-for-proxmox-monitoring/"><img src="assets/blog-thumbnails/installing-grafana-prometheus-for-proxmox-monitoring.webp" width="100%" alt="Installing Grafana & Prometheus for Proxmox Monitoring" /></a>
+  <br />
+  <a href="https://phiptech.com/installing-grafana-prometheus-for-proxmox-monitoring/"><strong>Installing Grafana & Prometheus for Proxmox Monitoring</strong></a>
+  <br />
+  <sub>Jun 01, 2025 &bull; 4 min read</sub>
+  <br /><br />
+  <a href="https://phiptech.com/installing-grafana-prometheus-for-proxmox-monitoring/"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>
+</td>
+</tr></table>
+
 <!-- BLOG-CARDS:END -->
 
 ## ⚠️ Before You Deploy
