@@ -1,22 +1,204 @@
-name: Update Latest Blog Posts
+name: Latest blog post workflow
 
 on:
   schedule:
-    # Run daily at 6:00 AM UTC
-    - cron: '0 6 * * *'
-  workflow_dispatch: # Allow manual triggering
+    - cron: '0 0 */2 * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/blog-post-workflow.yml'
+      - 'README.md'
 
 jobs:
-  update-blog-posts:
+  update-readme-with-blog:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Update blog posts
-        uses: gautamkrishnar/blog-post-workflow@v1
-        with:
-          feed_list: "https://phiptech.com/feed/"
+      - name: Disable Bot Fight Mode
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X PUT \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/bot_management" \
+            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"fight_mode": false}')
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | sed '$d')
+          echo "$body" | jq .
+          if [ "$http_code" != "200" ]; then
+            echo "Failed to disable Bot Fight Mode (HTTP $http_code)"
+            exit 1
+          fi
+          echo "Waiting 20s for propagation..."
+          sleep 20
+
+      - name: Fetch RSS Feed
+        run: |
+          curl -fsSL --connect-timeout 15 --max-time 60 \
+            -H "User-Agent: Mozilla/5.0 (compatible; GitHubActions; +https://github.com)" \
+            -H "Accept: application/rss+xml, application/xml, text/xml" \
+            https://phiptech.com/feed/ -o feed.xml
+
+      - name: Generate Blog Grid from RSS Feed
+        run: |
+          python3 <<'PYEOF'
+          import re
+          import xml.etree.ElementTree as ET
+          import urllib.parse
+          import urllib.request
+          import os
+          import shutil
+          import math
+          from email.utils import parsedate_to_datetime
+
+          if os.path.exists("assets/blog-thumbnails"):
+              shutil.rmtree("assets/blog-thumbnails")
+          os.makedirs("assets/blog-thumbnails", exist_ok=True)
+
+          with open("feed.xml", "r", encoding="utf-8", errors="replace") as f:
+              feed_xml = f.read()
+          feed_xml = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F]", "", feed_xml)
+
+          ns = {
+              "content": "http://purl.org/rss/1.0/modules/content/",
+              "media":   "http://search.yahoo.com/mrss/",
+              "dc":      "http://purl.org/dc/elements/1.1/",
+          }
+
+          try:
+              root = ET.fromstring(feed_xml)
+              items = root.findall(".//item")[:6]
+          except ET.ParseError as e:
+              print(f"Error: XML parsing failed ({e})")
+              exit(1)
+
+          posts = []
+          for idx, item in enumerate(items):
+              title_node = item.find("title")
+              title = title_node.text if title_node is not None and title_node.text else "Blog Post"
+              title = re.sub(r"<[^>]+>", "", title).strip()
+
+              link_node = item.find("link")
+              link = link_node.text if link_node is not None and link_node.text else "#"
+
+              pubdate_node = item.find("pubDate")
+              date_str = "Recent"
+              if pubdate_node is not None and pubdate_node.text:
+                  try:
+                      dt = parsedate_to_datetime(pubdate_node.text)
+                      date_str = dt.strftime("%b %d, %Y")
+                  except Exception:
+                      date_str = "Recent"
+
+              content_node = item.find("content:encoded", ns)
+              reading_time = "5 min"
+              if content_node is not None and content_node.text:
+                  word_count = len(re.sub(r"<[^>]+>", "", content_node.text).split())
+                  reading_time = f"{max(1, math.ceil(word_count / 200))} min"
+
+              media_node = item.find("media:content", ns)
+              image_url = media_node.get("url") if media_node is not None else None
+
+              slug = link.rstrip("/").split("/")[-1] if link != "#" else f"post-{idx}"
+              image_path = None
+
+              if image_url:
+                  try:
+                      ext = image_url.split(".")[-1].split("?")[0][:4]
+                      if ext not in ["jpg", "jpeg", "png", "webp", "gif"]:
+                          ext = "jpg"
+                      local_path = f"assets/blog-thumbnails/{slug}.{ext}"
+                      req = urllib.request.Request(image_url, headers={"User-Agent": "Mozilla/5.0 (compatible; GitHubActions)"})
+                      with urllib.request.urlopen(req, timeout=10) as resp:
+                          with open(local_path, "wb") as f:
+                              f.write(resp.read())
+                      image_path = local_path
+                      print(f"Downloaded: {local_path}")
+                  except Exception as e:
+                      print(f"Failed to download {image_url}: {e}")
+
+              if not image_path:
+                  image_path = f"https://img.shields.io/badge/-No+Image-0D1117?style=for-the-badge&logo=ghost"
+
+              posts.append({
+                  "title":        title[:60],
+                  "link":         link,
+                  "date":         date_str,
+                  "reading_time": reading_time,
+                  "image":        image_path,
+              })
+
+          grid_html = '<table width="100%"><tr>\n'
+          for idx, post in enumerate(posts):
+              if idx > 0 and idx % 3 == 0:
+                  grid_html += '</tr><tr>\n'
+              t = post["title"]
+              l = post["link"]
+              i = post["image"]
+              d = post["date"]
+              r = post["reading_time"]
+              grid_html += (
+                  f'<td width="33%" align="center" valign="top">\n'
+                  f'  <a href="{l}"><img src="{i}" width="100%" alt="{t}" /></a>\n'
+                  f'  <br />\n'
+                  f'  <a href="{l}"><strong>{t}</strong></a>\n'
+                  f'  <br />\n'
+                  f'  <sub>{d} &bull; {r} read</sub>\n'
+                  f'  <br /><br />\n'
+                  f'  <a href="{l}"><img src="https://img.shields.io/badge/-Read%20Post-00FF41?style=flat-square&logo=ghost&logoColor=000" /></a>\n'
+                  f'</td>\n'
+              )
+          grid_html += '</tr></table>\n'
+
+          with open("README.md", "r", encoding="utf-8") as f:
+              readme = f.read()
+
+          start_tag = "<!-- BLOG-CARDS:START -->"
+          end_tag   = "<!-- BLOG-CARDS:END -->"
+          start = readme.find(start_tag)
+          end   = readme.find(end_tag)
+
+          if start == -1 or end == -1:
+              print("Error: Could not find BLOG-CARDS tags in README.md")
+              exit(1)
+
+          start += len(start_tag)
+          with open("README.md", "w", encoding="utf-8") as f:
+              f.write(readme[:start] + "\n\n" + grid_html + "\n" + readme[end:])
+
+          print(f"Successfully updated README with {len(posts)} blog posts")
+          PYEOF
+
+      - name: Commit README updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet README.md assets/blog-thumbnails/; then
+            echo "No changes to commit"
+          else
+            echo "Changes detected"
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "Running on PR - validation only, skipping commit/push"
+              echo "✓ Workflow validation successful"
+            else
+              git add README.md assets/blog-thumbnails/
+              git commit -m "Update blog cards with latest posts"
+              git push
+              echo "Successfully committed and pushed changes"
+            fi
+          fi
+
+      - name: Re-enable Bot Fight Mode
+        if: always()
+        continue-on-error: true
+        run: |
+          curl -s -X PUT \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/bot_management" \
+            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"fight_mode": true}' | jq .
+          echo "Bot Fight Mode re-enabled"
